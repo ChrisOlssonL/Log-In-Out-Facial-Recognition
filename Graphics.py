@@ -21,11 +21,16 @@ class GUI:
         # self.btn_status.pack(anchor=tkinter.CENTER, expand=True)
         self.btn_recognize = tkinter.Button(self.window, text="Recognize", width = 50, command = self.recognize)
         self.btn_recognize.pack(anchor=tkinter.CENTER, expand=True)
+        self.btn_createData = tkinter.Button(self.window, text="Create Data", width = 50, command = self.create_data)
+        self.btn_createData.pack(anchor=tkinter.CENTER, expand=True)
         self.delay = 15
         self.update()
         self.window.mainloop()
     
     # def status(self):
+    def create_data(self):
+        self.rec = VideoCapture.create_data(self.v_source, "Liam")
+    
     def recognize(self):
         self.rec = VideoCapture.recogniziation(self.v_source)
     
