@@ -19,12 +19,15 @@ class GUI:
         self.btn_snapshot.pack(anchor=tkinter.CENTER, expand=True)
         # self.btn_status = tkinter.Button(self.window, text = "Login/Logout", width = 50, command = self.status)
         # self.btn_status.pack(anchor=tkinter.CENTER, expand=True)
+        self.btn_recognize = tkinter.Button(self.window, text="Recognize", width = 50, command = self.recognize)
+        self.btn_recognize.pack(anchor=tkinter.CENTER, expand=True)
         self.delay = 15
         self.update()
         self.window.mainloop()
     
     # def status(self):
-        
+    def recognize(self):
+        self.rec = VideoCapture.recogniziation(self.v_source)
     
     def snapshot(self):
         ret, frame = self.vid.get_frame()
