@@ -2,17 +2,19 @@ import face_recognition, imutils, pickle, time, cv2, os, sys, numpy, random, tki
 import PIL.Image, PIL.ImageTk
 
 from VideoHandler.Video_Capture import VideoCapture
-# import VideoCapture from Video_Capture
+
 
 class GUI:
     def __init__(self, window, w_title, v_source=0):
         self.window = window
         self.window.title(w_title)
         self.v_source = v_source
+        self.vid = VideoCapture(self.v_source)
+        
         
         
     def gui_video(self):
-        self.vid = VideoCapture(self.v_source)
+        #self.vid = VideoCapture(self.v_source)
         self.canvas = tkinter.Canvas(self.window, width = self.vid.width, height = self.vid.height)
         self.canvas.pack()
         self.btn_snapshot = tkinter.Button(self.window, text = "Snapshot", width = 50, command = self.snapshot)
@@ -27,12 +29,15 @@ class GUI:
         self.update()
         self.window.mainloop()
     
-    # def status(self):
     def create_data(self):
-        self.rec = VideoCapture.create_data(self.v_source, "Liam")
+        create = self.vid.create_data("Liam")
+        print("Created user: \t")
+        # self.rec = VideoCapture.create_data(self.v_source, "Liam")
     
     def recognize(self):
-        self.rec = VideoCapture.recogniziation(self.v_source)
+        create = self.vid.recogniziation("")
+        print(create)
+        # self.rec = VideoCapture.recogniziation(self.v_source)
     
     def snapshot(self):
         ret, frame = self.vid.get_frame()

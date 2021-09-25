@@ -1,14 +1,13 @@
-import cv2, tkinter, os
+import cv2, tkinter, os, pathlib
 import PIL.Image, PIL.ImageTk
 import numpy
 
 class VideoCapture:
-    def __init__(self, v_source=0, size=4):
-        #Open video source (cam = 0(default))
+    def __init__(self, vid,v_source=0, size=4):
         self.vid = cv2.VideoCapture(v_source)
         self.pred = []
-        self.datasets = '../users'
-        self.haar_file = '../haarcascade_frontalface_default.xml'
+        self.datasets = 'users'
+        self.haar_file = 'haarcascade_frontalface_default.xml'
         if not self.vid.isOpened():
             raise ValueError("Unable to open source", v_source)
         
@@ -27,15 +26,17 @@ class VideoCapture:
         
     def create_data(self, user):
         sub_data = str(user)
-        path = os.path.join(self.datasets, sub_data)
+        ROOT_DIR = pathlib.Path().resolve()
+        datasets = 'users'
+        haar_file = 'haarcascade_frontalface_default.xml'
+        path = os.path.join(ROOT_DIR, datasets, sub_data)
         if not os.path.isdir(path):
             os.mkdir(path)
-        
         (width, height) = (130, 100)
-        face_cascade = cv2.CascadeClassifier(self.haar_file)
+        face_cascade = cv2.CascadeClassifier(haar_file)
         count = 1
         while count < 50:
-            (_, im) = self.vid.read()
+            (_, im) = self.vid.read() 
             gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(gray, 1.3, 4)
             for (x, y, w, h) in faces:
@@ -43,14 +44,13 @@ class VideoCapture:
                 face = gray[y:y + h, x:x + w]
                 face_resize = cv2.resize(face, (width, height))
                 cv2.imwrite('% s/% s.png' % (path, count), face_resize)
+                print('% s/% s.png' % (path, count))
             count += 1
-            
-            # cv2.imshow('Opencv', im)
             key = cv2.waitKey(10)
             if key == 27:
                 break
     
-    def recogniziation(self):
+    def recogniziation(self, name):
         (images, lables, names, id) = ([], [], {}, 0)
         for (subdirs, dirs, files) in os.walk(self.datasets):
             for subdir in dirs:
@@ -92,14 +92,15 @@ class VideoCapture:
                 else:
                   cv2.putText(im, 'not recognized',(x-10, y-10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0))
 
-            cv2.imshow('OpenCV', im)
+            # cv2.imshow('OpenCV', im)
 
             key = cv2.waitKey(10)
             if key == 27:
                 break
+            if name == "":
+                name = "Could not find user.."
             return name
         
-    # Release the video source when the object is destroyed
     def __del__(self):
         if self.vid.isOpened():
             self.vid.release()

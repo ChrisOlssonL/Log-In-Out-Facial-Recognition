@@ -1,4 +1,4 @@
-import cv2, sys, numpy, os
+import cv2, sys, numpy, os, pathlib
 
 class Recognize:
     def __init__(self, pred, datasets, haar_file, size=4):
@@ -6,6 +6,7 @@ class Recognize:
         self.pred = []
         self.datasets = 'users'
         self.haar_file = 'haarcascade_frontalface_default.xml'
+        self.ROOT_DIR = pathlib.Path().resolve().parent
         #recognization()
     
     def recognization(self):
